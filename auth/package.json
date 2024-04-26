@@ -11,9 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/joi": "^17.2.3",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/pg": "^8.11.5",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "joi": "^17.13.0",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.5"
   },
   "devDependencies": {
