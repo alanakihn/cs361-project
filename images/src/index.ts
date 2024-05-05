@@ -6,14 +6,13 @@ import { v4 as uuidv4 } from 'uuid';
 import path from "path";
 import Joi, { ObjectSchema } from 'joi';
 import axios from 'axios';
-import bodyParser from 'body-parser';
 
 dotenv.config();
 
 declare global {
   namespace Express {
     interface Request {
-      uid?: string; // Add the 'uid' property as optional
+      uid?: string;
     }
   }
 }

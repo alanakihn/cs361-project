@@ -103,18 +103,20 @@ app.post("/login", validate(LoginSchema), async (req: Request, res: Response) =>
 });
 
 const VerifyTokenSchema = Joi.object({
-  uid: Joi.string().required(),
+  uid: Joi.string(),
   token: Joi.string().required(),
 });
 app.post("/verify", validate(VerifyTokenSchema), async (req: Request, res: Response) => {
   try {
     const user = jwt.verify(req.body.token, jwtSecret) as ParsedJWT;
 
-    if (user.uid !== req.body.uid) {
-      return res.status(400).json({ error: "Invalid or outdated bearer token" });
+    if (req.body.uid) {
+      if (user.uid !== req.body.uid) {
+        return res.status(400).json({ error: "Invalid or outdated bearer token" });
+      }
     }
 
-    return res.status(200).send();
+    return res.status(200).send({ uid: user.uid });
   } catch (err) {
     return res.status(400).json({ error: "Invalid or outdated bearer token" });
   }
