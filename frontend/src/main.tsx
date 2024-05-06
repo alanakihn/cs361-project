@@ -9,8 +9,13 @@ import {
 import './index.css'
 import AuthProvider from './components/AuthContext.tsx';
 import Signup from './Signup.tsx';
+import Home from './Home.tsx';
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
   {
     path: "/login",
     element: <Login />,
@@ -18,7 +23,7 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
-  }
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import Header from "./components/Header"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAuthToken } from "./api/auth";
 import { AuthContext } from "./components/AuthContext";
 
@@ -9,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const onFormSubmit = (e: any) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ const Login = () => {
     }).then((result) => {
         if (result) {
           login(result.token);
+          navigate("/");
         } else {
           alert("Invalid username / password");
         }

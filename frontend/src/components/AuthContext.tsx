@@ -63,6 +63,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     setAuthToken(null);
+    setDetails(null);
     localStorage.removeItem("authToken");
     localStorage.removeItem("authTokenTime");
   };
