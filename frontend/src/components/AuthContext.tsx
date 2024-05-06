@@ -1,10 +1,12 @@
 import { createContext, useState, ReactNode, useEffect } from "react";
+import { UserDetails, verifyToken } from "../api/auth";
 
 const TokenTimeout = 1000 * 60 * 60 * 24;
 
 interface AuthContextType {
   authToken: AuthToken;
   login: (token: string) => void;
+  details: UserDetails | null;
   logout: () => void;
   isLoading: boolean;
 }
@@ -19,6 +21,7 @@ interface AuthProviderProps {
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [authToken, setAuthToken] = useState<AuthToken>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [details, setDetails] = useState<UserDetails | null>(null);
 
   useEffect(() => {
     if (authToken === null) {
@@ -41,6 +44,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [authToken]);
 
+  useEffect(() => {
+    if (authToken) {
+      verifyToken({
+        token: authToken, 
+      }).then((result) => {
+          setDetails(result);
+        });;
+    }
+  }, [authToken]);
+
   const login = (token: string) => {
     setIsLoading(true);
     setAuthToken(token);
@@ -55,7 +68,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authToken, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ authToken, login, details, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

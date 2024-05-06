@@ -1,15 +1,25 @@
 import { useState } from "react";
 import Header from "./components/Header"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { createNewAccount } from "./api/auth";
 
 const Signup = () => {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const onFormSubmit = (e: any) => {
     e.preventDefault();
     // talk to auth microservice
+    
+    createNewAccount({
+      username,
+      password,
+    }).then((result) => {
+        console.log(result);
+        navigate('/login');
+      });
   };
 
   return (

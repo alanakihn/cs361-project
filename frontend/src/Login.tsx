@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Header from "./components/Header"
 import { Link } from "react-router-dom";
+import { getAuthToken } from "./api/auth";
+import { AuthContext } from "./components/AuthContext";
 
 const Login = () => {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { login } = useContext(AuthContext);
 
   const onFormSubmit = (e: any) => {
     e.preventDefault();
     // talk to auth microservice
+    
+    getAuthToken({
+      username,
+      password,
+    }).then((result) => {
+        if (result) {
+          login(result.token);
+        } else {
+          alert("Invalid username / password");
+        }
+      });
   };
 
   return (
