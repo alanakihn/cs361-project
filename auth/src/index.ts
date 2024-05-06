@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import Joi, { ObjectSchema } from "joi";
 import jwt from "jsonwebtoken";
+import cors from 'cors';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ const config = {
 
 const app: Express = express();
 app.use(express.json());
+app.use(cors());
 const client = new Client(config);
 
 interface User {
@@ -116,7 +118,10 @@ app.post("/verify", validate(VerifyTokenSchema), async (req: Request, res: Respo
       }
     }
 
-    return res.status(200).send({ uid: user.uid });
+    const result = await client.query('SELECT * FROM users WHERE uid=$1', [user.uid]);
+    const dbUser: User = result.rows[0];
+
+    return res.status(200).send({ uid: user.uid, username: dbUser.username, createdAt: dbUser.created_at });
   } catch (err) {
     return res.status(400).json({ error: "Invalid or outdated bearer token" });
   }
