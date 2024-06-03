@@ -54,8 +54,11 @@ const getUidFromToken = async (token: string) => {
 
     const data: AuthVerify = result.data;
 
+    console.log(data);
+
     return data.uid;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };
