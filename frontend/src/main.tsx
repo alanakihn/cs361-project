@@ -14,6 +14,7 @@ import Recipes from './Recipes.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { CreateRecipe } from './CreateRecipe.tsx';
 import Profile from './Profile.tsx';
+import Converter from './Converter.tsx';
  
 const queryClient = new QueryClient();
 
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />,
+  },
+  {
+    path: "/converter",
+    element: <Converter />,
   },
 ]);
 

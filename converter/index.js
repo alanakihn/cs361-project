@@ -1,8 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 4003;
 
 app.use(express.json());
+app.use(cors());
 
 // Convert metric to imperial
 app.post('/metric-to-imperial', (req, res) => {

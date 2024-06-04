@@ -29,6 +29,11 @@ const Home = () => {
                 Create Recipe
               </button>
             </Link>
+            <Link to="/converter">
+              <button className="button-primary">
+                Unit Converter Tool
+              </button>
+            </Link>
           </div>
         </div>
       </div>
