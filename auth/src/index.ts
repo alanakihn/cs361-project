@@ -104,6 +104,24 @@ app.post("/login", validate(LoginSchema), async (req: Request, res: Response) =>
   });
 });
 
+app.get("/details", async (req: Request, res: Response) => {
+  try {
+    if (!req.query.uid) {
+      return res.status(400).json({ error: "UID must be included as a query parameter." });
+    }
+    const result = await client.query('SELECT * FROM users WHERE uid=$1', [req.query.uid]);
+    const dbUser: User = result.rows[0];
+
+    if (!dbUser) {
+      return res.status(400).send({ error: "That UID does not exist." });
+    }
+
+    return res.status(200).send({ uid: req.query.uid, username: dbUser.username, createdAt: dbUser.created_at });
+  } catch (err) {
+    return res.status(500).json({ error: "An unexpected error occured" });
+  }
+});
+
 const VerifyTokenSchema = Joi.object({
   uid: Joi.string(),
   token: Joi.string().required(),

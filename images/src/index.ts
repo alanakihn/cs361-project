@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import path from "path";
 import Joi, { ObjectSchema } from 'joi';
 import axios from 'axios';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -91,6 +92,7 @@ const config = {
 
 const app: Express = express();
 app.use(express.json());
+app.use(cors());
 const client = new Client(config);
 
 client.connect().then(() => {

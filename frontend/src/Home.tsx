@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Header from "./components/Header";
 
 const Home = () => {
@@ -12,16 +13,22 @@ const Home = () => {
             <p>Please select one of the options below to get started...</p>
           </div>
           
-          <div className="flex flex-col h-[220px] mt-6 justify-evenly">
-            <button className="button-primary">
-              View Your Profile
-            </button>
-            <button className="button-primary">
-              View Community Recipes
-            </button>
-            <button className="button-primary">
-              Create Recipes
-            </button>
+          <div className="flex flex-col items-center h-[220px] mt-6 justify-evenly">
+            <Link to="/profile">
+              <button className="button-primary">
+                View Your Profile
+              </button>
+            </Link>
+            <Link to="/recipes">
+              <button className="button-primary">
+                View Community Recipes
+              </button>
+            </Link>
+            <Link to="/recipes/new">
+              <button className="button-primary">
+                Create Recipe
+              </button>
+            </Link>
           </div>
         </div>
       </div>

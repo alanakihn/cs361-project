@@ -13,7 +13,7 @@ const Header = ({ children, pageName }: HeaderProps) => {
   return (
     <>
       <div className="flex items-center w-full justify-between p-2 bg-orange-500">
-        <div className="w-[225px] flex justify-center">
+        <div className="w-[255px] flex justify-center">
           <div className="bg-white p-2 px-4 rounded">
             <h2 className="text-black text-xl font-bold">
               {pageName}

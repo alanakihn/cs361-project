@@ -1,5 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from "express";
-import { Client } from 'pg';
+import { Client, QueryResult } from 'pg';
 import dotenv from "dotenv";
 import Joi, { ObjectSchema } from "joi";
 import cors from 'cors';
@@ -44,7 +44,7 @@ app.get("/", (req: Request, res: Response) => {
 
 const recipeSchema = Joi.object({
   title: Joi.string().required(),
-  image_links: Joi.array().items(Joi.string().uri()),
+  image_links: Joi.array().items(Joi.string()),
   description: Joi.string().required(),
   author_uid: Joi.string().guid({ version: 'uuidv4' }).required(),
 });
@@ -58,7 +58,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const response = await axios.post("http://localhost:4000/verify", { uid: author_uid, token });
+    const response = await axios.post(`${process.env.AUTH_HOST}/verify`, { uid: author_uid, token });
     if (response.status === 200) {
       next();
     } else {
@@ -83,12 +83,36 @@ app.post("/recipes", validate(recipeSchema), verifyToken, async (req: Request, r
   }
 });
 
+interface Recipe {
+  id: number;
+  title: string;
+  image_links: string[];
+  description: string;
+  author_uid: string;
+  created_at: string;
+  updated_at: string;
+  author_details?: Details;
+}
+interface Details {
+  uid: string;
+  username: string;
+  created_at: string;
+}
 // Read all recipes
 app.get("/recipes", async (req: Request, res: Response) => {
   try {
-    const result = await client.query('SELECT * FROM recipes');
-    res.status(200).json(result.rows);
+    const result: QueryResult<Recipe> = await client.query('SELECT * FROM recipes');
+
+    const authorDetailsPromises = result.rows.map(async (recipe) => {
+      const details = await axios.get(`${process.env.AUTH_HOST}/details?uid=${recipe.author_uid}`);
+      return { ...recipe, author_details: details.data };
+    });
+
+    const recipesWithAuthorDetails = await Promise.all(authorDetailsPromises);
+
+    res.status(200).json(recipesWithAuthorDetails);
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 });
