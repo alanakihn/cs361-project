@@ -8,7 +8,7 @@ interface HeaderProps {
 }
 
 const Header = ({ children, pageName }: HeaderProps) => {
-  const { details, logout } = useContext(AuthContext);
+  const { details } = useContext(AuthContext);
 
   return (
     <>
@@ -29,11 +29,11 @@ const Header = ({ children, pageName }: HeaderProps) => {
 
         <div className="w-[225px] flex justify-center">
           { details ? (
-            <div className="bg-white p-2 px-4 rounded cursor-pointer" onClick={() => logout()}>
+            <Link to="/profile" className="bg-white p-2 px-4 rounded cursor-pointer">
               <h2 className="text-black text-xl font-bold">
                 Hello, {details.username}!
               </h2>
-            </div>
+            </Link>
           ) : (
             <Link to="/login">
               <button className="button-secondary">
